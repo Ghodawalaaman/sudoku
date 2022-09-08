@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-//#include "sudoko.c"
+#include "sudoku.c"
 
 #include<SDL2/SDL.h>
 
@@ -142,7 +142,6 @@ int main(){
   // Render the texture on screen
   SDL_RenderCopy( renderer, pikachu_texture, NULL, NULL);
   SDL_RenderPresent( renderer );
-  scanf("%c",&garbage);
   
   // Clearing the window with white color
   SDL_SetRenderDrawColor( renderer, 0x00, 0x18, 0x18, 0x18 );
