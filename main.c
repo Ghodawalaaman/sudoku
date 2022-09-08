@@ -14,6 +14,7 @@ extern int board[BOARD_SIZE][BOARD_SIZE];
 
 SDL_Surface *numbers[9];
 SDL_Texture *numbers_texture[9];
+SDL_Texture *qmark_texture;
 /*
 
 //sudoku problem
@@ -40,6 +41,9 @@ void DrawBoard(SDL_Renderer *renderer){
     for(int j=0; j<BOARD_SIZE; j++){
       if(board[i][j] != 0){
 	SDL_RenderCopy(renderer, numbers_texture[board[i][j]-1], NULL, &dest);
+      }
+      else{
+	SDL_RenderCopy(renderer, qmark_texture,NULL,&dest);
       }
       dest.x += 32;
     }
@@ -68,7 +72,7 @@ int solve_sudoku(SDL_Renderer *renderer)
       //the cell is board[row][col]
       if(is_safe(i, row, col))
         {
-   	  SDL_Delay(100);
+   	  SDL_Delay(500);
 	  board[row][col] = i;
 	  DrawBoard(renderer);
 	  //backtracking
@@ -77,6 +81,7 @@ int solve_sudoku(SDL_Renderer *renderer)
 	  //if we can't proceed with this solution
 	  //reassign the cell
 	  board[row][col]=0;
+	  DrawBoard(renderer);	  
         }
     }
   return 0;
@@ -119,6 +124,7 @@ int main(){
     fprintf(stderr,"ERROR: Failed to load the resources.\n");
     exit(1);
   }
+  SDL_Surface *qmark = SDL_LoadBMP("./img/question_mark.bmp");
   char dst[MAX_PATH_SIZE];
   for(int i=1; i<10; i++){
     sprintf(dst,"./img/%d.bmp",i);
@@ -133,12 +139,14 @@ int main(){
       exit(1);
     }
   }
-
+  
+  
   // Converting the surface to textures
   SDL_Texture *pikachu_texture =  SDL_CreateTextureFromSurface( renderer, pikachu);
   for(int i=0; i<9; i++){
     numbers_texture[i] = SDL_CreateTextureFromSurface(renderer , numbers[i]);
   }
+  qmark_texture = SDL_CreateTextureFromSurface( renderer, qmark);
   // Render the texture on screen
   SDL_RenderCopy( renderer, pikachu_texture, NULL, NULL);
   SDL_RenderPresent( renderer );
